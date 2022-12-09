@@ -7,6 +7,7 @@ import { AlertTriangle } from 'react-feather';
 import Modal from '../../UI/Modal/Modal';
 import useModal from '../../../hooks/useModal/useModal';
 import Loading from '../../UI/Loading/Loading';
+import * as actions from '../../../state/actions/index';
 
 import addImage from '../../../assets/images/addimage.png';
 
@@ -149,6 +150,7 @@ const StyledAlertIcon = styled(AlertTriangle)`
 
 const AddMenuCategoryForm = (props) => {
   const { images, isLoading, errorResponse } = props;
+  const { onNewMenuCategory, newItemCategoryErrorResponse } = props;
 
   const [isShowingModal, toggleModal] = useModal();
   const [choosenImage, setChoosenImage] = useState();
@@ -178,7 +180,7 @@ const AddMenuCategoryForm = (props) => {
       setImageError(true);
     } else {
       setImageError(false);
-      console.log(data.name, choosenImage);
+      onNewMenuCategory(data.name, choosenImage.name, window.localStorage.getItem('activeRestaurant'));
     }
   }
 
@@ -210,6 +212,7 @@ const AddMenuCategoryForm = (props) => {
           <div>{errors.name && errors.name.message}</div>
         </InputField>
         <StyledErrorBox err={errorResponse}><AlertTriangle />{errorResponse}</StyledErrorBox>
+        <StyledErrorBox err={newItemCategoryErrorResponse}><AlertTriangle />{newItemCategoryErrorResponse}</StyledErrorBox>
         <StyledInput type='submit' value='Dodaj Kategorię' />
       </StyledForm>
 
@@ -242,20 +245,25 @@ const mapStateToProps = state => ({
   errorResponse: state.restaurants.error
 });
 
-
+const mapDispatchToProps = dispatch => ({
+  onNewMenuCategory: (name, image, restaurant) => dispatch(actions.addItemCategory(name, image, restaurant))
+});
 
 AddMenuCategoryForm.propTypes = {
+  onNewMenuCategory: PropTypes.func.isRequired,
   images: PropTypes.arrayOf(PropTypes.shape({
     _id: PropTypes.string,
     name: PropTypes.string
   })),
   isLoading: PropTypes.bool.isRequired,
-  errorResponse: PropTypes.string
+  errorResponse: PropTypes.string,
+  newItemCategoryErrorResponse: PropTypes.string
 };
 
 AddMenuCategoryForm.defaultProps = {
   images: [],
-  errorResponse: null
+  errorResponse: null,
+  newItemCategoryErrorResponse: null
 };
 
-export default connect(mapStateToProps, null)(AddMenuCategoryForm);
+export default connect(mapStateToProps, mapDispatchToProps)(AddMenuCategoryForm);

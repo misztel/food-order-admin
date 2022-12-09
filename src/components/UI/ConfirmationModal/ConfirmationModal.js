@@ -62,15 +62,22 @@ const StyledCloseButton = styled.div`
 `;
 
 const StyledTitle = styled.h1`
-  font-size: 30px;
+  font-size: 24px;
   font-weight: 600;
   color: #fff;
 `;
 
 const StyledText = styled.h1`
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 400;
   color: #fff;
+`;
+
+const Buttons = styled.div`
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-top: 35px;
 `;
 
 const ConfirmationModal = ({ clicked, show, title, text, onConfirm }) => show ? ReactDOM.createPortal(
@@ -87,8 +94,10 @@ const ConfirmationModal = ({ clicked, show, title, text, onConfirm }) => show ? 
         <StyledText>
           {text}
         </StyledText>
-        <Button clicked={clicked}>Anuluj</Button>
-        <Button clicked={onConfirm}>Potwierdź</Button>
+        <Buttons>
+          <Button clicked={clicked}>Anuluj</Button>
+          <Button clicked={onConfirm} variant="alert">Potwierdź</Button>
+        </Buttons>
       </StyledModal>
     </StyledModalWrapper>
   </>, document.body

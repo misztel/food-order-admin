@@ -16,17 +16,18 @@ export const getItemCategoriesFail = (error) => ({
   error: error
 });
 
-export const getItemCategories = () => dispatch => {
+export const getItemCategories = (restaurantId) => dispatch => {
   dispatch(getItemCategoriesStart());
 
   const token = localStorage.getItem('token');
-  axios.get(`http://localhost:8080/admin/itemCategories`, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  })
+  axios.get(`http://localhost:8080/admin/itemCategories/${restaurantId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
     .then(res => {
-      dispatch(getItemCategoriesSuccess(res.data.itemCategories));
+      dispatch(getItemCategoriesSuccess(res.data.data));
     })
     .catch(err => {
       dispatch(getItemCategoriesFail(err.response.data.message));
@@ -130,7 +131,7 @@ export const deleteItemCategory = (id) => dispatch => {
     }
   })
     .then(res => {
-      dispatch(deleteItemCategorySuccess(res.data));
+      dispatch(deleteItemCategorySuccess(res.data.itemCategoryId));
     })
     .catch(err => {
       dispatch(deleteItemCategoryFail(err.response.data.message));

@@ -17,7 +17,6 @@ export const getImagesFail = (error) => ({
 
 export const getImages = () => dispatch => {
   dispatch(getImagesStart());
-  console.log('get images');
   const token = localStorage.getItem('token');
   axios.get(`http://localhost:8080/api/images`, {
     headers: {

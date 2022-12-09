@@ -4,12 +4,14 @@ import authReducer from './reducers/auth';
 import usersReducer from './reducers/users';
 import restaurantsReducer from './reducers/restaurants';
 import imagesReducer from './reducers/images';
+import itemCategoriesReducer from './reducers/itemCategories';
 
 const rootReducer = combineReducers({
   auth: authReducer,
   users: usersReducer,
   restaurants: restaurantsReducer,
-  images: imagesReducer
+  images: imagesReducer,
+  itemCategories: itemCategoriesReducer
 })
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
