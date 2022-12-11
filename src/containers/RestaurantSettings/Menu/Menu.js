@@ -30,7 +30,12 @@ const Menu = (props) => {
     itemCategoriesList = <Loading />;
   }
   else if (itemCategories.length > 0) {
-    itemCategoriesList = <ItemCategoriesList itemCategories={itemCategories} isLoadingItemCategories={isLoadingItemCategories} />;
+    itemCategoriesList = <ItemCategoriesList
+      itemCategories={itemCategories}
+      isLoadingItemCategories={isLoadingItemCategories}
+      isLoadingImages={isLoadingImages}
+      images={images}
+    />;
   } else {
     itemCategoriesList = <p>Brak kategorii menu w tym punkcie restauracyjnym!</p>;
   }

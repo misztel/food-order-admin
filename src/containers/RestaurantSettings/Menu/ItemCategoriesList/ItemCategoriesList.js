@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Trash2 } from 'react-feather';
+import { Trash2, Edit } from 'react-feather';
 import styled from 'styled-components';
+import Modal from '../../../../components/UI/Modal/Modal';
+import useModal from '../../../../hooks/useModal/useModal';
 import * as actions from '../../../../state/actions/index';
 import ConfirmationModal from '../../../../components/UI/ConfirmationModal/ConfirmationModal';
 import useConfirmationModal from '../../../../hooks/UseConfirmationModal/useConfirmationModal';
+import EditMenuCategoryForm from '../../../../components/Forms/EditMenuCategoryForm/EditMenuCategoryForm';
 
 import Button from '../../../../components/UI/Button/Button';
 
@@ -54,9 +57,10 @@ const ListItemImg = styled.img`
 `;
 
 const ItemCategoriesList = (props) => {
-  const { itemCategories, deleteItemCategory } = props;
+  const { itemCategories, deleteItemCategory, images, isLoadingImages } = props;
   const [isShowingConfirmationModal, toggleConfirmationModal] = useConfirmationModal();
   const [itemCategoryId, setItemCategoryId] = useState(null);
+  const [isShowingModal, toggleModal] = useModal();
 
   const handleClicked = (id) => {
     toggleConfirmationModal();
@@ -68,6 +72,11 @@ const ItemCategoriesList = (props) => {
     toggleConfirmationModal();
   }
 
+  const handleEditClicked = (id) => {
+    toggleModal();
+    setItemCategoryId(id);
+  }
+
   return (
     <ListContainer>
       {(itemCategories.map(itemCategory =>
@@ -77,6 +86,9 @@ const ItemCategoriesList = (props) => {
             <ListItemTitle> {itemCategory.name} </ListItemTitle>
           </ListItemData>
           <ListItemManage>
+            <Button clicked={() => handleEditClicked(itemCategory._id)}>
+              <Edit size={20} />
+            </Button>
             <Button variant="alert" clicked={() => handleClicked(itemCategory._id)}>
               <Trash2 size={20} />
             </Button>
@@ -90,6 +102,16 @@ const ItemCategoriesList = (props) => {
         text="Czy chcesz usunąć kategorię"
         onConfirm={() => handleConfirm(itemCategoryId)}
       />
+      <Modal
+        show={isShowingModal}
+        clicked={toggleModal}
+      >
+        <EditMenuCategoryForm
+          images={images}
+          isLoading={isLoadingImages}
+          itemCategoryId={itemCategoryId}
+        />
+      </Modal>
     </ListContainer>
   )
 };
@@ -99,16 +121,22 @@ const mapDispatchToProps = dispatch => ({
 });
 
 ItemCategoriesList.propTypes = {
+  isLoadingImages: PropTypes.bool.isRequired,
   deleteItemCategory: PropTypes.func.isRequired,
   itemCategories: PropTypes.arrayOf(PropTypes.shape({
     _id: PropTypes.string,
     name: PropTypes.string,
     image: PropTypes.string
-  }))
+  })),
+  images: PropTypes.arrayOf(PropTypes.shape({
+    _id: PropTypes.string,
+    name: PropTypes.string
+  })),
 }
 
 ItemCategoriesList.defaultProps = {
-  itemCategories: []
+  itemCategories: [],
+  images: [],
 }
 
 export default connect(null, mapDispatchToProps)(ItemCategoriesList);

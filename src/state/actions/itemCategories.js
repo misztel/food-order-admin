@@ -27,12 +27,47 @@ export const getItemCategories = (restaurantId) => dispatch => {
       }
     })
     .then(res => {
+      console.log(res.data);
       dispatch(getItemCategoriesSuccess(res.data.data));
     })
     .catch(err => {
       dispatch(getItemCategoriesFail(err.response.data.message));
     })
-}
+};
+
+// get single ItemCategory
+export const getItemCategoryStart = () => ({
+  type: actionTypes.GET_ITEM_CATEGORY_START
+});
+
+export const getItemCategorySuccess = (data) => ({
+  type: actionTypes.GET_ITEM_CATEGORY_SUCCESS,
+  data: data.data
+});
+
+export const getItemCategoryFail = (error) => ({
+  type: actionTypes.GET_ITEM_CATEGORY_FAIL,
+  error: error
+});
+
+export const getItemCategory = (itemCategoryId) => dispatch => {
+  dispatch(getItemCategoryStart());
+
+  console.log(itemCategoryId);
+  const token = localStorage.getItem('token');
+  axios.get(`http://localhost:8080/admin/itemCategory/${itemCategoryId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    .then(res => {
+      dispatch(getItemCategorySuccess(res.data));
+    })
+    .catch(err => {
+      dispatch(getItemCategoryFail(err.response.data.message));
+    })
+};
 
 // add ItemCategory
 export const addItemCategoryStart = () => ({

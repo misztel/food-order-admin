@@ -3,8 +3,11 @@ import * as actionTypes from '../actions/actionTypes';
 const InitialState = {
   isLoading: false,
   itemCategories: [],
+  error: null,
 
-  error: null
+  itemCategory: {},
+  getItemCategoryIsLoading: false,
+  getItemCategoryError: null
 }
 
 const reducer = (state = InitialState, action) => {
@@ -26,6 +29,24 @@ const reducer = (state = InitialState, action) => {
         ...state,
         isLoading: false,
         error: action.error
+      }
+    case actionTypes.GET_ITEM_CATEGORY_START:
+      return {
+        ...state,
+        getItemCategoryIsLoading: true
+      };
+    case actionTypes.GET_ITEM_CATEGORY_SUCCESS:
+      return {
+        ...state,
+        getItemCategoryIsLoading: false,
+        itemCategory: action.data,
+        getItemCategoryError: null
+      }
+    case actionTypes.GET_ITEM_CATEGORY_FAIL:
+      return {
+        ...state,
+        getItemCategoryIsLoading: false,
+        getItemCategoryError: action.error
       }
     case actionTypes.ADD_ITEM_CATEGORY_START:
       return {
