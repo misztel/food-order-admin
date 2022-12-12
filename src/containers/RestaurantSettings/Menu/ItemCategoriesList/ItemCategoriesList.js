@@ -23,6 +23,7 @@ const ItemCategoriesList = (props) => {
   const [isShowingConfirmationModal, toggleConfirmationModal] = useConfirmationModal();
   const [itemCategoryId, setItemCategoryId] = useState(null);
   const [isShowingModal, toggleModal] = useModal();
+  const [isShowingAddItemModal, toggleAddItemModal] = useModal();
   const [toggledCategory, setToggledCategory] = useState(null);
 
   const handleClickedDelete = (id) => {
@@ -40,6 +41,10 @@ const ItemCategoriesList = (props) => {
     setItemCategoryId(id);
   }
 
+  const handleAddItemClicked = () => {
+    toggleAddItemModal();
+  }
+
   const handleToggleCategory = (id) => {
     toggledCategory === id ? setToggledCategory(null) : setToggledCategory(id);
   }
@@ -54,6 +59,7 @@ const ItemCategoriesList = (props) => {
           handleToggleCategory={() => handleToggleCategory(itemCategory._id)}
           handleEditClicked={() => handleEditClicked(itemCategory._id)}
           handleClickedDelete={() => handleClickedDelete(itemCategory._id)}
+          handleAddItemClicked={() => handleAddItemClicked()}
         />
 
       ))}
@@ -73,6 +79,12 @@ const ItemCategoriesList = (props) => {
           isLoading={isLoadingImages}
           itemCategoryId={itemCategoryId}
         />
+      </Modal>
+      <Modal
+        show={isShowingAddItemModal}
+        clicked={toggleAddItemModal}
+      >
+        <h2> ADD ITEM MODAL</h2>
       </Modal>
     </ListContainer>
   )

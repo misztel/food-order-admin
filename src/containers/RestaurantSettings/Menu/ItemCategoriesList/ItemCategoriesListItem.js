@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Trash2, Edit, ChevronRight } from 'react-feather';
+import { Trash2, Edit, ChevronRight, PlusCircle } from 'react-feather';
 import Button from '../../../../components/UI/Button/Button';
 
 const ListItem = styled.div`
@@ -60,6 +60,14 @@ const ItemContainer = styled.div`
   max-height: ${props => props.$itemcategorytoggled ? `${props.$containerheight}px` : '0px'};
 `;
 
+const ItemContainerInner = styled.div`
+  margin-top:20px;
+`;
+
+const PlusCircleIcon = styled(PlusCircle)`
+  margin-right: 15px;
+`;
+
 const ItemCategortiesListItem = (props) => {
   const {
     // key,
@@ -67,7 +75,8 @@ const ItemCategortiesListItem = (props) => {
     handleEditClicked,
     handleToggleCategory,
     toggledCategory,
-    handleClickedDelete
+    handleClickedDelete,
+    handleAddItemClicked
   } = props;
 
   const [isToggledCategory, setIsToggledCategory] = useState('false');
@@ -102,7 +111,9 @@ const ItemCategortiesListItem = (props) => {
         </ListItemManage>
       </ListItemHeading>
       <ItemContainer ref={ref} $containerheight={height} $itemcategorytoggled={isToggledCategory}>
-        <h2>Here will be list of meals in current category</h2>
+        <ItemContainerInner>
+          <Button clicked={handleAddItemClicked}><PlusCircleIcon /> Dodaj Produkt</Button>
+        </ItemContainerInner>
       </ItemContainer>
     </ListItem>
   );
@@ -114,6 +125,7 @@ ItemCategortiesListItem.propTypes = {
     name: PropTypes.string,
     image: PropTypes.string,
   }).isRequired,
+  handleAddItemClicked: PropTypes.func.isRequired,
   handleToggleCategory: PropTypes.func.isRequired,
   handleEditClicked: PropTypes.func.isRequired,
   handleClickedDelete: PropTypes.func.isRequired,
