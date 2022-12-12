@@ -9,7 +9,7 @@ import * as actions from '../../../../state/actions/index';
 import ConfirmationModal from '../../../../components/UI/ConfirmationModal/ConfirmationModal';
 import useConfirmationModal from '../../../../hooks/UseConfirmationModal/useConfirmationModal';
 import EditMenuCategoryForm from '../../../../components/Forms/EditMenuCategoryForm/EditMenuCategoryForm';
-import ItemCategortiesListItem from './ItemCategortiesListItem';
+import ItemCategortiesListItem from './ItemCategoriesListItem';
 
 
 
