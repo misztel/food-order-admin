@@ -65,21 +65,23 @@ const reducer = (state = InitialState, action) => {
         isLoading: false,
         error: action.error
       }
-    // case actionTypes.UPDATE_ITEM_CATEGORY_START:
-    //   return {
-    //     ...state,
-    //     isLoading: true
-    //   }
-    // case actionTypes.UPDATE_ITEM_CATEGORY_SUCCESS:
-    //   return {
-    //     ...state,
-    //     isLoading: false,
-    //     itemCategories
-    //   }
-    // case actionTypes.UPDATE_ITEM_CATEGORY_FAIL:
-    //   return {
+    case actionTypes.UPDATE_ITEM_CATEGORY_START:
+      return {
+        ...state,
+        isLoading: true
+      }
+    case actionTypes.UPDATE_ITEM_CATEGORY_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        itemCategories: state.itemCategories.map(itemCategory =>
+          itemCategory._id === action.data._id ? action.data : itemCategory
+        )
+      }
+    case actionTypes.UPDATE_ITEM_CATEGORY_FAIL:
+      return {
 
-    //   }
+      }
     case actionTypes.DELETE_ITEM_CATEGORY_START:
       return {
         ...state,

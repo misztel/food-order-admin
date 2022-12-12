@@ -27,7 +27,6 @@ export const getItemCategories = (restaurantId) => dispatch => {
       }
     })
     .then(res => {
-      console.log(res.data);
       dispatch(getItemCategoriesSuccess(res.data.data));
     })
     .catch(err => {
@@ -53,7 +52,6 @@ export const getItemCategoryFail = (error) => ({
 export const getItemCategory = (itemCategoryId) => dispatch => {
   dispatch(getItemCategoryStart());
 
-  console.log(itemCategoryId);
   const token = localStorage.getItem('token');
   axios.get(`http://localhost:8080/admin/itemCategory/${itemCategoryId}`,
     {
@@ -105,7 +103,7 @@ export const addItemCategory = (name, image, restaurant) => dispatch => {
     })
 }
 
-// edit ItemCategory
+// update ItemCategory
 export const updateItemCategoryStart = () => ({
   type: actionTypes.UPDATE_ITEM_CATEGORY_START
 });

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Trash2, Edit } from 'react-feather';
 import styled from 'styled-components';
 import Modal from '../../../../components/UI/Modal/Modal';
 import useModal from '../../../../hooks/useModal/useModal';
@@ -10,8 +9,8 @@ import * as actions from '../../../../state/actions/index';
 import ConfirmationModal from '../../../../components/UI/ConfirmationModal/ConfirmationModal';
 import useConfirmationModal from '../../../../hooks/UseConfirmationModal/useConfirmationModal';
 import EditMenuCategoryForm from '../../../../components/Forms/EditMenuCategoryForm/EditMenuCategoryForm';
+import ItemCategortiesListItem from './ItemCategortiesListItem';
 
-import Button from '../../../../components/UI/Button/Button';
 
 
 const ListContainer = styled.div`
@@ -19,55 +18,19 @@ const ListContainer = styled.div`
   margin: 20px 0;
 `;
 
-const ListItem = styled.div`
-  display: flex;
-  border-radius: 10px;
-  width: 100%;
-  padding: 10px 20px;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-  background-color: ${({ theme }) => theme.backgroundColor.secondary};
-`;
-
-const ListItemData = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-`;
-
-const ListItemManage = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`;
-
-const ListItemTitle = styled.p`
-  font-size: 16px;
-  font-weight: bold;
-`;
-
-const ListItemImg = styled.img`
-  width: 50px;
-  height: 50px;
-  border-radius: 100px;
-  margin-right: 20px;
-`;
-
 const ItemCategoriesList = (props) => {
   const { itemCategories, deleteItemCategory, images, isLoadingImages } = props;
   const [isShowingConfirmationModal, toggleConfirmationModal] = useConfirmationModal();
   const [itemCategoryId, setItemCategoryId] = useState(null);
   const [isShowingModal, toggleModal] = useModal();
+  const [toggledCategory, setToggledCategory] = useState(null);
 
-  const handleClicked = (id) => {
+  const handleClickedDelete = (id) => {
     toggleConfirmationModal();
     setItemCategoryId(id);
   }
 
-  const handleConfirm = (id) => {
+  const handleConfirmDelete = (id) => {
     deleteItemCategory(id);
     toggleConfirmationModal();
   }
@@ -77,30 +40,29 @@ const ItemCategoriesList = (props) => {
     setItemCategoryId(id);
   }
 
+  const handleToggleCategory = (id) => {
+    toggledCategory === id ? setToggledCategory(null) : setToggledCategory(id);
+  }
+
   return (
     <ListContainer>
       {(itemCategories.map(itemCategory =>
-        <ListItem key={itemCategory._id}>
-          <ListItemData>
-            <ListItemImg key={itemCategory._id} src={`http://localhost:8080/upload/${itemCategory.image}`} alt={itemCategory.name} />
-            <ListItemTitle> {itemCategory.name} </ListItemTitle>
-          </ListItemData>
-          <ListItemManage>
-            <Button clicked={() => handleEditClicked(itemCategory._id)}>
-              <Edit size={20} />
-            </Button>
-            <Button variant="alert" clicked={() => handleClicked(itemCategory._id)}>
-              <Trash2 size={20} />
-            </Button>
-          </ListItemManage>
-        </ListItem>
+        <ItemCategortiesListItem
+          key={itemCategory._id}
+          itemCategory={itemCategory}
+          toggledCategory={toggledCategory}
+          handleToggleCategory={() => handleToggleCategory(itemCategory._id)}
+          handleEditClicked={() => handleEditClicked(itemCategory._id)}
+          handleClickedDelete={() => handleClickedDelete(itemCategory._id)}
+        />
+
       ))}
       <ConfirmationModal
         show={isShowingConfirmationModal}
         clicked={toggleConfirmationModal}
         title="Potwierdź operację"
         text="Czy chcesz usunąć kategorię"
-        onConfirm={() => handleConfirm(itemCategoryId)}
+        onConfirm={() => handleConfirmDelete(itemCategoryId)}
       />
       <Modal
         show={isShowingModal}

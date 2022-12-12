@@ -14,6 +14,8 @@ const variantOptions = {
 };
 
 const StyledButton = styled.button`
+  display: flex;
+  align-items: center;
   background: ${({ theme }) => theme.accentColor.primary};
   border: none;
   border-radius: 5px;
@@ -22,7 +24,7 @@ const StyledButton = styled.button`
   font-size: 14px;
   font-weight: 600;
   margin: 5px 10px;
-  padding: 10px 20px;
+  padding: ${(props) => props.paddingX ? `10px ${props.paddingX}px` : '10px 20px'};
   transition: all 0.3 ease;
 
   ${({ variant }) =>
@@ -36,13 +38,14 @@ const StyledButton = styled.button`
    `}
 `;
 
-const Button = ({ children, clicked, variant }) => (
-  <StyledButton onClick={clicked} variant={variant}>
+const Button = ({ children, clicked, variant, paddingX }) => (
+  <StyledButton onClick={clicked} variant={variant} paddingX={paddingX}>
     {children}
   </StyledButton>
 );
 
 Button.propTypes = {
+  paddingX: PropTypes.number,
   children: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.node
@@ -52,6 +55,7 @@ Button.propTypes = {
 };
 
 Button.defaultProps = {
+  paddingX: null,
   clicked: null,
   variant: 'primary'
 };

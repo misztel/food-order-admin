@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { PlusCircle } from 'react-feather';
+import styled from 'styled-components';
 import * as actions from '../../../state/actions/index';
 import Modal from '../../../components/UI/Modal/Modal';
 import useModal from '../../../hooks/useModal/useModal';
@@ -11,6 +13,18 @@ import ItemCategoriesList from './ItemCategoriesList/ItemCategoriesList';
 import Button from '../../../components/UI/Button/Button';
 import AddMenuCategoryForm from '../../../components/Forms/AddMenuCategoryForm/AddMenuCategoryForm';
 
+const MenuTitleContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+const Title = styled.h1`
+  margin-right: 20px;
+`;
+
+const PlusCircleIcon = styled(PlusCircle)`
+  margin-right: 15px;
+`;
 
 const Menu = (props) => {
   const { getImages, getItemCategories, images, itemCategories, isLoadingImages, isLoadingItemCategories } = props;
@@ -18,6 +32,9 @@ const Menu = (props) => {
 
   useEffect(() => {
     getImages();
+  }, [])
+
+  useEffect(() => {
     getItemCategories(window.localStorage.getItem('activeRestaurant'));
   }, [])
 
@@ -42,10 +59,10 @@ const Menu = (props) => {
 
   return (
     <div>
-      <h1>Menu</h1>
-
-      <Button clicked={handleAddCategory}>Nowa Kategoria</Button>
-
+      <MenuTitleContainer>
+        <Title>Menu</Title>
+        <Button clicked={handleAddCategory}><PlusCircleIcon /> Nowa Kategoria</Button>
+      </MenuTitleContainer>
       <Modal
         show={isShowingModal}
         clicked={toggleModal}

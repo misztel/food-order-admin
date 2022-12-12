@@ -150,7 +150,7 @@ const StyledAlertIcon = styled(AlertTriangle)`
 
 const EditMenuCategoryForm = (props) => {
   const { itemCategoryId, images, isLoading, errorResponse } = props;
-  const { onNewMenuCategory, newItemCategoryErrorResponse, getItemCategory, getItemCategoryError, getItemCategoryIsLoading, itemCategory } = props;
+  const { updateItemCategory, updateItemCategoryErrorResponse, getItemCategory, getItemCategoryError, getItemCategoryIsLoading, itemCategory } = props;
 
   const [isShowingModal, toggleModal] = useModal();
   const [choosenImage, setChoosenImage] = useState();
@@ -160,7 +160,6 @@ const EditMenuCategoryForm = (props) => {
   });
 
   useEffect(() => {
-    console.log('get ITEM CATEOGRY');
     getItemCategory(itemCategoryId);
   }, [])
 
@@ -169,7 +168,7 @@ const EditMenuCategoryForm = (props) => {
       ?
       setChoosenImage(itemCategory.image)
       :
-      console.log('doesnt change');
+      null
   }, [itemCategory]);
 
   useEffect(() => {
@@ -181,7 +180,6 @@ const EditMenuCategoryForm = (props) => {
   }
 
   const handleImageChange = (img) => {
-    console.log('change img');
     setChoosenImage(img.name);
     toggleModal();
   }
@@ -199,7 +197,7 @@ const EditMenuCategoryForm = (props) => {
       setImageError(true);
     } else {
       setImageError(false);
-      onNewMenuCategory(data.name, choosenImage.name, window.localStorage.getItem('activeRestaurant'));
+      updateItemCategory(itemCategory._id, data.name, choosenImage.name);
     }
   }
 
@@ -235,7 +233,7 @@ const EditMenuCategoryForm = (props) => {
                 <div>{errors.name && errors.name.message}</div>
               </InputField>
               <StyledErrorBox err={errorResponse}><AlertTriangle />{errorResponse}</StyledErrorBox>
-              <StyledErrorBox err={newItemCategoryErrorResponse}><AlertTriangle />{newItemCategoryErrorResponse}</StyledErrorBox>
+              <StyledErrorBox err={updateItemCategoryErrorResponse}><AlertTriangle />{updateItemCategoryErrorResponse}</StyledErrorBox>
               <StyledInput type='submit' value='Zaktualizuj Kategorię' />
               {getItemCategoryError ? (<div>{getItemCategoryError}</div>) : null}
             </StyledForm>
@@ -274,11 +272,12 @@ const mapStateToProps = state => ({
   getItemCategoryError: state.itemCategories.getItemCategoryError,
   getItemCategoryIsLoading: state.itemCategories.getItemCategoryIsLoading,
   getItemCategory: state.itemCategories.getItemCategory,
-  itemCategory: state.itemCategories.itemCategory
+  itemCategory: state.itemCategories.itemCategory,
+  updateItemCategoryErrorResponse: state.itemCategories.updateItemCategoryErrorResponse
 });
 
 const mapDispatchToProps = dispatch => ({
-  onNewMenuCategory: (name, image, restaurant) => dispatch(actions.addItemCategory(name, image, restaurant)),
+  updateItemCategory: (id, name, image) => dispatch(actions.updateItemCategory(id, name, image)),
   getItemCategory: (itemCategoryId) => dispatch(actions.getItemCategory(itemCategoryId))
 });
 
@@ -288,7 +287,7 @@ EditMenuCategoryForm.propTypes = {
     name: PropTypes.string,
     image: PropTypes.string
   }),
-  onNewMenuCategory: PropTypes.func.isRequired,
+  updateItemCategory: PropTypes.func.isRequired,
   getItemCategory: PropTypes.func.isRequired,
   images: PropTypes.arrayOf(PropTypes.shape({
     _id: PropTypes.string,
@@ -298,7 +297,7 @@ EditMenuCategoryForm.propTypes = {
   getItemCategoryIsLoading: PropTypes.bool.isRequired,
   getItemCategoryError: PropTypes.string,
   errorResponse: PropTypes.string,
-  newItemCategoryErrorResponse: PropTypes.string,
+  updateItemCategoryErrorResponse: PropTypes.string,
   itemCategoryId: PropTypes.string.isRequired
 };
 
@@ -307,7 +306,7 @@ EditMenuCategoryForm.defaultProps = {
   images: [],
   errorResponse: null,
   getItemCategoryError: null,
-  newItemCategoryErrorResponse: null
+  updateItemCategoryErrorResponse: null
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditMenuCategoryForm);

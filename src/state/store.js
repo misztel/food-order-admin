@@ -14,8 +14,19 @@ const rootReducer = combineReducers({
   itemCategories: itemCategoriesReducer
 })
 
+// Be sure to ONLY add this middleware in development!
+const middleware = process.env.NODE_ENV !== 'production' ?
+  // eslint-disable-next-line global-require
+  [require('redux-immutable-state-invariant').default(), thunk] :
+  [thunk];
+
+
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
+// for prod
+// const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));
+
+// for development
+const store = createStore(rootReducer, composeEnhancers(applyMiddleware(...middleware)));
 
 export default store;
