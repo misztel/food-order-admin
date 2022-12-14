@@ -27,11 +27,16 @@ const PlusCircleIcon = styled(PlusCircle)`
 `;
 
 const Menu = (props) => {
-  const { getImages, getItemCategories, images, itemCategories, isLoadingImages, isLoadingItemCategories } = props;
+  const { getImages, getItemCategories, getMenuItems, images, itemCategories, menuItems, isLoadingMenuItems, isLoadingImages, isLoadingItemCategories } = props;
   const [isShowingModal, toggleModal] = useModal();
 
   useEffect(() => {
     getImages();
+  }, [])
+
+  useEffect(() => {
+    console.log('get menu items');
+    getMenuItems(window.localStorage.getItem('activeRestaurant'));
   }, [])
 
   useEffect(() => {
@@ -52,6 +57,8 @@ const Menu = (props) => {
       isLoadingItemCategories={isLoadingItemCategories}
       isLoadingImages={isLoadingImages}
       images={images}
+      menuItems={menuItems}
+      isLoadingMenuItems={isLoadingMenuItems}
     />;
   } else {
     itemCategoriesList = <p>Brak kategorii menu w tym punkcie restauracyjnym!</p>;
@@ -79,33 +86,47 @@ const mapStateToProps = state => ({
   images: state.images.images,
   isLoadingImages: state.images.isLoading,
   isLoadingItemCategories: state.images.isLoading,
-  itemCategories: state.itemCategories.itemCategories
+  itemCategories: state.itemCategories.itemCategories,
+  menuItems: state.items.items,
+  isLoadingMenuItems: state.items.isLoading
 });
 
 const mapDispatchToProps = dispatch => ({
   getImages: () => dispatch(actions.getImages()),
-  getItemCategories: (restaurantId) => dispatch(actions.getItemCategories(restaurantId))
+  getItemCategories: (restaurantId) => dispatch(actions.getItemCategories(restaurantId)),
+  getMenuItems: (restaurantId) => dispatch(actions.getMenuItems(restaurantId))
 });
 
 Menu.propTypes = {
   getImages: PropTypes.func.isRequired,
   getItemCategories: PropTypes.func.isRequired,
+  getMenuItems: PropTypes.func.isRequired,
   itemCategories: PropTypes.arrayOf(PropTypes.shape({
     _id: PropTypes.string,
     name: PropTypes.string,
     image: PropTypes.string
+  })),
+  menuItems: PropTypes.arrayOf(PropTypes.shape({
+    _id: PropTypes.string,
+    name: PropTypes.string,
+    image: PropTypes.string,
+    price: PropTypes.number,
+    active: PropTypes.bool,
+    wrapping: PropTypes.bool
   })),
   images: PropTypes.arrayOf(PropTypes.shape({
     _id: PropTypes.string,
     name: PropTypes.string
   })),
   isLoadingImages: PropTypes.bool.isRequired,
-  isLoadingItemCategories: PropTypes.bool.isRequired
+  isLoadingItemCategories: PropTypes.bool.isRequired,
+  isLoadingMenuItems: PropTypes.bool.isRequired
 }
 
 Menu.defaultProps = {
   images: [],
-  itemCategories: []
+  itemCategories: [],
+  menuItems: []
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Menu);

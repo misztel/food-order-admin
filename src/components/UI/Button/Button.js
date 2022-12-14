@@ -23,7 +23,7 @@ const StyledButton = styled.button`
   cursor: pointer;
   font-size: 14px;
   font-weight: 600;
-  margin: 5px 10px;
+  margin: ${(props) => props.marginX ? `5px ${props.marginX}px` : '5px 10px'};
   padding: ${(props) => props.paddingX ? `10px ${props.paddingX}px` : '10px 20px'};
   transition: all 0.3 ease;
 
@@ -38,14 +38,15 @@ const StyledButton = styled.button`
    `}
 `;
 
-const Button = ({ children, clicked, variant, paddingX }) => (
-  <StyledButton onClick={clicked} variant={variant} paddingX={paddingX}>
+const Button = ({ children, clicked, variant, paddingX, marginX }) => (
+  <StyledButton onClick={clicked} variant={variant} paddingX={paddingX} marginX={marginX}>
     {children}
   </StyledButton>
 );
 
 Button.propTypes = {
   paddingX: PropTypes.number,
+  marginX: PropTypes.number,
   children: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.node
@@ -56,6 +57,7 @@ Button.propTypes = {
 
 Button.defaultProps = {
   paddingX: null,
+  marginX: null,
   clicked: null,
   variant: 'primary'
 };

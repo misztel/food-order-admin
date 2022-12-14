@@ -10,6 +10,7 @@ import ConfirmationModal from '../../../../components/UI/ConfirmationModal/Confi
 import useConfirmationModal from '../../../../hooks/UseConfirmationModal/useConfirmationModal';
 import EditMenuCategoryForm from '../../../../components/Forms/EditMenuCategoryForm/EditMenuCategoryForm';
 import ItemCategortiesListItem from './ItemCategoriesListItem';
+import AddMenuItemForm from '../../../../components/Forms/AddMenuItemForm/AddMenuItemForm';
 
 
 
@@ -19,7 +20,7 @@ const ListContainer = styled.div`
 `;
 
 const ItemCategoriesList = (props) => {
-  const { itemCategories, deleteItemCategory, images, isLoadingImages } = props;
+  const { itemCategories, menuItems, deleteItemCategory, images, isLoadingImages } = props;
   const [isShowingConfirmationModal, toggleConfirmationModal] = useConfirmationModal();
   const [itemCategoryId, setItemCategoryId] = useState(null);
   const [isShowingModal, toggleModal] = useModal();
@@ -41,8 +42,9 @@ const ItemCategoriesList = (props) => {
     setItemCategoryId(id);
   }
 
-  const handleAddItemClicked = () => {
+  const handleAddItemClicked = (id) => {
     toggleAddItemModal();
+    setItemCategoryId(id);
   }
 
   const handleToggleCategory = (id) => {
@@ -59,7 +61,8 @@ const ItemCategoriesList = (props) => {
           handleToggleCategory={() => handleToggleCategory(itemCategory._id)}
           handleEditClicked={() => handleEditClicked(itemCategory._id)}
           handleClickedDelete={() => handleClickedDelete(itemCategory._id)}
-          handleAddItemClicked={() => handleAddItemClicked()}
+          handleAddItemClicked={() => handleAddItemClicked(itemCategory._id)}
+          menuItems={menuItems}
         />
 
       ))}
@@ -84,7 +87,7 @@ const ItemCategoriesList = (props) => {
         show={isShowingAddItemModal}
         clicked={toggleAddItemModal}
       >
-        <h2> ADD ITEM MODAL</h2>
+        <AddMenuItemForm categoryId={itemCategoryId} images={images} />
       </Modal>
     </ListContainer>
   )
@@ -102,6 +105,14 @@ ItemCategoriesList.propTypes = {
     name: PropTypes.string,
     image: PropTypes.string
   })),
+  menuItems: PropTypes.arrayOf(PropTypes.shape({
+    _id: PropTypes.string,
+    name: PropTypes.string,
+    image: PropTypes.string,
+    price: PropTypes.number,
+    active: PropTypes.bool,
+    wrapping: PropTypes.bool
+  })),
   images: PropTypes.arrayOf(PropTypes.shape({
     _id: PropTypes.string,
     name: PropTypes.string
@@ -111,6 +122,7 @@ ItemCategoriesList.propTypes = {
 ItemCategoriesList.defaultProps = {
   itemCategories: [],
   images: [],
+  menuItems: []
 }
 
 export default connect(null, mapDispatchToProps)(ItemCategoriesList);

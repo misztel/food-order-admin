@@ -5,13 +5,15 @@ import usersReducer from './reducers/users';
 import restaurantsReducer from './reducers/restaurants';
 import imagesReducer from './reducers/images';
 import itemCategoriesReducer from './reducers/itemCategories';
+import itemsReducer from './reducers/items';
 
 const rootReducer = combineReducers({
   auth: authReducer,
   users: usersReducer,
   restaurants: restaurantsReducer,
   images: imagesReducer,
-  itemCategories: itemCategoriesReducer
+  itemCategories: itemCategoriesReducer,
+  items: itemsReducer
 })
 
 // Be sure to ONLY add this middleware in development!

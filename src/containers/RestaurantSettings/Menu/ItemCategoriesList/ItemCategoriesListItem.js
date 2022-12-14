@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Trash2, Edit, ChevronRight, PlusCircle } from 'react-feather';
 import Button from '../../../../components/UI/Button/Button';
+import MenuItemList from './MenuItemList';
 
 const ListItem = styled.div`
   display: flex;
@@ -61,7 +62,7 @@ const ItemContainer = styled.div`
 `;
 
 const ItemContainerInner = styled.div`
-  margin-top:20px;
+  margin-top: 20px;
 `;
 
 const PlusCircleIcon = styled(PlusCircle)`
@@ -76,7 +77,8 @@ const ItemCategortiesListItem = (props) => {
     handleToggleCategory,
     toggledCategory,
     handleClickedDelete,
-    handleAddItemClicked
+    handleAddItemClicked,
+    menuItems
   } = props;
 
   const [isToggledCategory, setIsToggledCategory] = useState('false');
@@ -112,7 +114,10 @@ const ItemCategortiesListItem = (props) => {
       </ListItemHeading>
       <ItemContainer ref={ref} $containerheight={height} $itemcategorytoggled={isToggledCategory}>
         <ItemContainerInner>
-          <Button clicked={handleAddItemClicked}><PlusCircleIcon /> Dodaj Produkt</Button>
+          <Button marginX={0} clicked={handleAddItemClicked}>
+            <PlusCircleIcon /> Dodaj Produkt
+          </Button>
+          <MenuItemList menuItems={menuItems} itemCategoryId={itemCategory._id} />
         </ItemContainerInner>
       </ItemContainer>
     </ListItem>
@@ -120,6 +125,14 @@ const ItemCategortiesListItem = (props) => {
 };
 
 ItemCategortiesListItem.propTypes = {
+  menuItems: PropTypes.arrayOf(PropTypes.shape({
+    _id: PropTypes.string,
+    name: PropTypes.string,
+    image: PropTypes.string,
+    price: PropTypes.number,
+    active: PropTypes.bool,
+    wrapping: PropTypes.bool
+  })),
   itemCategory: PropTypes.shape({
     _id: PropTypes.string,
     name: PropTypes.string,
@@ -133,6 +146,7 @@ ItemCategortiesListItem.propTypes = {
 }
 
 ItemCategortiesListItem.defaultProps = {
+  menuItems: [],
   toggledCategory: null
 }
 
